@@ -36,6 +36,26 @@ const $modalClose  = document.getElementById('modal-close');
 
 let modalCardId = null;
 
+// ── Local manifest ─────────────────────────────────────────────
+// Keyed by card ID; populated from local-cards.json when present.
+let localIndex = {};
+
+async function loadLocalManifest() {
+  try {
+    const res = await fetch('local-cards.json');
+    if (!res.ok) return;
+    const list = await res.json();
+    list.forEach(c => { localIndex[c.id] = c._localImage || null; });
+    console.log(`Local manifest: ${list.length} cards with local images.`);
+  } catch (_) { /* file doesn't exist yet — that's fine */ }
+}
+
+function imageFor(card) {
+  const local = localIndex[card.id];
+  if (local) return local;
+  return card.images?.large || card.images?.small || '';
+}
+
 // ── API ────────────────────────────────────────────────────────
 async function fetchAllForRarity(rarity) {
   let page = 1, cards = [], total = Infinity;
@@ -103,7 +123,7 @@ function cardHTML(c) {
   const isIR   = c.rarity === 'Illustration Rare';
   const rarKey = isIR ? 'ir' : 'sir';
   const rarLbl = isIR ? 'IR' : 'SIR';
-  const img    = c.images?.small || c.images?.large || '';
+  const img    = imageFor(c);
 
   return `
     <div class="card ${owned ? 'owned' : ''}" data-id="${c.id}">
@@ -202,7 +222,7 @@ function openModal(id) {
   modalCardId = id;
 
   const isIR = c.rarity === 'Illustration Rare';
-  $modalImg.src       = c.images?.large || c.images?.small || '';
+  $modalImg.src       = imageFor(c);
   $modalImg.alt       = c.name;
   $modalName.textContent   = c.name;
   $modalSet.textContent    = c.set?.name || '—';
@@ -293,6 +313,7 @@ function escHtml(str) {
 
 (async () => {
   try {
+    await loadLocalManifest();
     allCards = await loadAllCards();
     populateSets();
     updateStats();
