@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokémon TCG — IR & SIR Collection</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <div class="header-inner">
+      <div class="header-title">
+        <h1>Pokémon TCG Collection</h1>
+        <p class="subtitle">Illustration Rare &amp; Special Illustration Rare</p>
+      </div>
+      <div class="stats-panel">
+        <div class="stat-block">
+          <span class="stat-value" id="owned-count">0</span>
+          <span class="stat-label">Owned</span>
+        </div>
+        <div class="stat-sep">/</div>
+        <div class="stat-block">
+          <span class="stat-value" id="total-count">—</span>
+          <span class="stat-label">Total</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progress-fill"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="controls">
+    <input type="text" id="search" placeholder="Search cards…" autocomplete="off">
+
+    <div class="filter-group" id="rarity-filters">
+      <button class="filter-btn active" data-rarity="all">All</button>
+      <button class="filter-btn ir" data-rarity="ir">IR</button>
+      <button class="filter-btn sir" data-rarity="sir">SIR</button>
+    </div>
+
+    <select id="set-filter">
+      <option value="">All Sets</option>
+    </select>
+
+    <div class="filter-group" id="owned-filters">
+      <button class="filter-btn active" data-owned="all">All</button>
+      <button class="filter-btn" data-owned="owned">Owned</button>
+      <button class="filter-btn" data-owned="missing">Missing</button>
+    </div>
+
+    <button id="clear-btn" title="Clear collection">Clear Collection</button>
+  </div>
+
+  <div id="loading" class="loading">
+    <div class="pokeball-spinner">
+      <div class="ball-top"></div>
+      <div class="ball-mid"></div>
+      <div class="ball-bot"></div>
+    </div>
+    <p id="loading-msg">Fetching cards…</p>
+  </div>
+
+  <div id="result-bar" class="result-bar hidden">
+    Showing <strong id="result-count">0</strong> cards
+  </div>
+
+  <div id="card-grid" class="card-grid hidden"></div>
+
+  <!-- Detail Modal -->
+  <div id="modal-overlay" class="modal-overlay hidden" role="dialog" aria-modal="true">
+    <div class="modal">
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <div class="modal-body">
+        <div class="modal-img-wrap">
+          <img id="modal-img" src="" alt="">
+        </div>
+        <div class="modal-info">
+          <div class="modal-rarity-badge" id="modal-rarity"></div>
+          <h2 id="modal-name"></h2>
+          <table class="modal-table">
+            <tr><th>Set</th><td id="modal-set"></td></tr>
+            <tr><th>Number</th><td id="modal-number"></td></tr>
+            <tr><th>Artist</th><td id="modal-artist"></td></tr>
+            <tr><th>Type(s)</th><td id="modal-types"></td></tr>
+          </table>
+          <button class="own-btn" id="modal-own-btn"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
